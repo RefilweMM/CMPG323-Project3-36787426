@@ -1,55 +1,56 @@
 ﻿using Data;
+using EcoPower_Logistics.Data.Repository;
+using EcoPower_Logistics.Data.Migrations;
+using EcoPower_Logistics.Data;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using System.Linq.Expressions;
+using EcoPower_Logistics.Repository;
 
-namespace EcoPower_Logistics.Repository
+namespace EcoPower_Logistics.Data.Repository
 {
-    public class ProductsRepository
+    public class ProductsRepository : GenericRepository<Product>
     {
-        protected readonly SuperStoreContext _context = new SuperStoreContext();
+        protected readonly SuperStoreContext _context;
 
-        // GET ALL: Products
-        public IEnumerable<Product> GetAll()
+        public ProductsRepository(SuperStoreContext context) : base(context)
         {
-            return _context.Products.ToList();
+            _context = context;
         }
 
-            // GET by ID: Product
-            public Product GetById(int id)
-            {
-                return _context.Products.Find(id);
-            }
+        public void Add(Product entity)
+        {
+            _context.Set<Product>().Add(entity);
+        }
 
-            // CREATE: Product
-            public void Create(Product product)
-            {
-                _context.Products.Add(product);
-                _context.SaveChanges();
-            }
+        public void AddRange(IEnumerable<Product> entities)
+        {
+            _context.Set<Product>().AddRange(entities);
+        }
 
-            // EDIT: Product
-            public void Edit(Product product)
-            {
-                _context.Entry(product).State = EntityState.Modified;
-                _context.SaveChanges();
-            }
+        public IEnumerable<Product> Find(Expression<Func<Product, bool>> expression)
+        {
+            return _context.Set<Product>().Where(expression);
+        }
 
-            // DELETE: Product by ID
-            public void Delete(int id)
-            {
-                var product = _context.Products.Find(id);
-                if (product != null)
-                {
-                    _context.Products.Remove(product);
-                    _context.SaveChanges();
-                }
-            }
+        public IEnumerable<Product> GetAll()
+        {
+            return _context.Set<Product>().ToList();
+        }
 
-            // EXISTS: Check if Product exists by ID
-            public bool Exists(int id)
-            {
-                return _context.Products.Any(p => p.ProductId == id);
-            }
+        public Product GetById(int id)
+        {
+            return _context.Set<Product>().Find(id);
+        }
 
+        public void Remove(Product entity)
+        {
+            _context.Set<Product>().Remove(entity);
+        }
+
+        public void RemoveRange(IEnumerable<Product> entities)
+        {
+            _context.Set<Product>().RemoveRange(entities);
+        }
     }
 }

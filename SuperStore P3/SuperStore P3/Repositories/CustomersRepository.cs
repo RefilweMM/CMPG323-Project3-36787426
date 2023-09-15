@@ -1,55 +1,54 @@
 ﻿using Data;
+using EcoPower_Logistics.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using System.Linq.Expressions;
 
 namespace EcoPower_Logistics.Repository
 {
-    public class CustomersRepository
+    public class CustomersRepository : GenericRepository<Customer>
     {
-            protected readonly SuperStoreContext _context = new SuperStoreContext();
+        protected readonly SuperStoreContext _context;
 
-            // GET ALL: Customers
-            public IEnumerable<Customer> GetAll()
-            {
-                return _context.Customers.ToList();
-            }
-        // GET by ID: Customer
+        public CustomersRepository(SuperStoreContext context) : base(context)
+        {
+            _context = context;
+        }
+
+        public void Add(Customer entity)
+        {
+            _context.Set<Customer>().Add(entity);
+        }
+
+        public void AddRange(IEnumerable<Customer> entities)
+        {
+            _context.Set<Customer>().AddRange(entities);
+        }
+
+        public IEnumerable<Customer> Find(Expression<Func<Customer, bool>> expression)
+        {
+            return _context.Set<Customer>().Where(expression);
+        }
+
+        public IEnumerable<Customer> GetAll()
+        {
+            return _context.Set<Customer>().ToList();
+        }
+
         public Customer GetById(int id)
         {
-            return _context.Customers.Find(id);
+            return _context.Set<Customer>().Find(id);
         }
 
-        // CREATE: Customer
-        public void Create(Customer customer)
+        public void Remove(Customer entity)
         {
-            _context.Customers.Add(customer);
-            _context.SaveChanges();
+            _context.Set<Customer>().Remove(entity);
         }
 
-        // EDIT: Customer
-        public void Edit(Customer customer)
+        public void RemoveRange(IEnumerable<Customer> entities)
         {
-            _context.Entry(customer).State = EntityState.Modified;
-            _context.SaveChanges();
+            _context.Set<Customer>().RemoveRange(entities);
         }
-
-        // DELETE: Customer by ID
-        public void Delete(int id)
-        {
-            var customer = GetById(id);
-            if (customer != null)
-            {
-                _context.Customers.Remove(customer);
-                _context.SaveChanges();
-            }
-        }
-
-        // EXISTS: Customer by ID
-        public bool Exists(int id)
-        {
-            return _context.Customers.Any(c => c.CustomerId == id);
-        }
-
     }
 
 }

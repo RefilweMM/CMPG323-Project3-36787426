@@ -1,56 +1,54 @@
 ﻿using Data;
+using EcoPower_Logistics.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using System.Linq.Expressions;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace EcoPower_Logistics.Repository
 {
-    public class OrdersRepository
+    public class OrdersRepository : GenericRepository<Order>
     {
-        protected readonly SuperStoreContext _context = new SuperStoreContext();
+        protected readonly SuperStoreContext _context;
 
-        // GET ALL: Orders
+        public OrdersRepository(SuperStoreContext context) : base(context)
+        {
+            _context = context;
+        }
+
+        public void Add(Order entity)
+        {
+            _context.Set<Order>().Add(entity);
+        }
+
+        public void AddRange(IEnumerable<Order> entities)
+        {
+            _context.Set<Order>().AddRange(entities);
+        }
+
+        public IEnumerable<Order> Find(Expression<Func<Order, bool>> expression)
+        {
+            return _context.Set<Order>().Where(expression);
+        }
+
         public IEnumerable<Order> GetAll()
         {
-            return _context.Orders.ToList();
+            return _context.Set<Order>().ToList();
         }
 
-        // GET by ID: Order
         public Order GetById(int id)
         {
-            return _context.Orders.Find(id);
+            return _context.Set<Order>().Find(id);
         }
 
-        // CREATE: Order
-        public void Create(Order order)
+        public void Remove(Order entity)
         {
-            _context.Orders.Add(order);
-            _context.SaveChanges();
+            _context.Set<Order>().Remove(entity);
         }
 
-        // EDIT: Order
-        public void Edit(Order order)
+        public void RemoveRange(IEnumerable<Order> entities)
         {
-            _context.Entry(order).State = EntityState.Modified;
-            _context.SaveChanges();
+            _context.Set<Order>().RemoveRange(entities);
         }
-
-        // DELETE: Order by ID
-        public void Delete(int id)
-        {
-            var order = GetById(id);
-            if (order != null)
-            {
-                _context.Orders.Remove(order);
-                _context.SaveChanges();
-            }
-        }
-
-        // EXISTS: Order by ID
-        public bool Exists(int id)
-        {
-            return _context.Orders.Any(o => o.OrderId == id);
-        }
-
-
     }
 }
