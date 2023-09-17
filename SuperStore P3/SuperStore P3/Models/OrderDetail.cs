@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Models;
 
-namespace Models
+namespace EcoPower_Logistics.Models
 {
     public partial class OrderDetail
     {

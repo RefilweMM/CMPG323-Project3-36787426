@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Models;
+using EcoPower_Logistics.Models;
 
-namespace Data
+namespace EcoPower_Logistics.Data
 {
     public partial class SuperStoreContext : DbContext
     {

@@ -8,32 +8,36 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Data;
 using Models;
+using EcoPower_Logistics.Data;
 using EcoPower_Logistics.Repository;
+using EcoPower_Logistics.Models;
 
-namespace Controllers
+namespace EcoPower_Logistics.Controllers
 {
     [Authorize]
     public class CustomersController : Controller
     {
-        private readonly SuperStoreContext _context;
+        private readonly ICustomersRepository _customerRepository;
 
-        private readonly CustomersRepository _customerRepository;
-
-        public CustomersController()
+        public CustomersController(ICustomersRepository customersRepository)
         {
-            _customerRepository = new CustomersRepository(); // Initialize your repository here
+            _customerRepository = customersRepository;
         }
 
         // GET: Customers
-        public IActionResult Index()
-        {
-            var customers = _customerRepository.GetAll();
-            return View(customers);
+        public async Task<IActionResult> Index()
+        {     
+            return View(_customerRepository.GetAll());
         }
 
         // GET: Customers/Details/5
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var customer = _customerRepository.GetById(id);
 
             if (customer == null)
@@ -52,59 +56,66 @@ namespace Controllers
         // POST: Customers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerId,CustomerTitle,CustomerName,CustomerSurname,CellPhone")] Customer customer)
         {
-            if (ModelState.IsValid)
-            {
-                _customerRepository.Create(customer);
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(customer);
+            _customerRepository.Add(customer);
+            return RedirectToAction(nameof(Index), true);
         }
 
         /// GET: Customers/Edit/5
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var customer = _customerRepository.GetById(id);
 
             if (customer == null)
             {
                 return NotFound();
             }
-
             return View(customer);
         }
 
         /// POST: Customers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,CustomerTitle,CustomerName,CustomerSurname,CellPhone")] Customer customer)
         {
             if (id != customer.CustomerId)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            try
             {
-                _customerRepository.Edit(customer);
-                return RedirectToAction(nameof(Index));
+                _customerRepository.Update(customer);
             }
-
-            return View(customer);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CustomerExists(customer.CustomerId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Customers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null || _context.Customers == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
+            var customer = _customerRepository.GetById(id);
+
             if (customer == null)
             {
                 return NotFound();
@@ -116,20 +127,16 @@ namespace Controllers
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_customerRepository.Exists(id))
-            {
-                _customerRepository.Delete(id);
-                return RedirectToAction(nameof(Index));
-            }
-
-            return NotFound();
+            var customer = _customerRepository.GetById(id);
+            _customerRepository.Remove(customer);
+            return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerExists(int id)
         {
-            return (_context.Customers?.Any(e => e.CustomerId == id)).GetValueOrDefault();
+            return _customerRepository.Exists(id);
         }
     }
 }

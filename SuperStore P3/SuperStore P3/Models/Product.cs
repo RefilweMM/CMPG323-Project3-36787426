@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Models;
 
-namespace Models
+namespace EcoPower_Logistics.Models
 {
     public partial class Product
     {
@@ -18,7 +19,7 @@ namespace Models
         [DisplayName("Product Description")]
         public string? ProductDescription { get; set; }
         [DisplayName("Units in Stock")]
-        public int? UnitsInStock { get; set; }
+        public int UnitsInStock { get; set; }
 
         [DisplayName("Order Details")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

@@ -8,37 +8,39 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Data;
+using EcoPower_Logistics.Models;
 using EcoPower_Logistics.Repository;
 
-namespace Controllers
+namespace EcoPower_Logistics.Controllers
 {
     [Authorize]
     public class OrdersController : Controller
     {
-        private readonly SuperStoreContext _context;
-        private readonly OrdersRepository _orderRepository;
 
-        public OrdersController(SuperStoreContext context)
-        {
-            _context = context;
-        }
-        
+        private readonly IOrdersRepository _orderRepository;
+        private readonly ICustomersRepository _customerRepository;
 
-        public OrdersController()
+
+        public OrdersController(IOrdersRepository orderRepository, ICustomersRepository customerRepository)
         {
-            _orderRepository = new OrdersRepository(); // Initialize your repository here
+            _orderRepository = orderRepository;
+            _customerRepository = customerRepository;
         }
 
         // GET: Orders
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var orders = _orderRepository.GetAll();
-            return View(orders);
+            return View(_orderRepository.GetAll());
         }
 
         // GET: Orders/Details/5
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var order = _orderRepository.GetById(id);
 
             if (order == null)
@@ -52,57 +54,73 @@ namespace Controllers
         // GET: Orders/Create
         public IActionResult Create()
         {
+            ViewData["CustomerId"] = new SelectList(_customerRepository.GetAll(), "CustomerId", "CustomerName");
             return View();
         }
 
         // POST: Orders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Order order)
+        public async Task<IActionResult> Create([Bind("OrderId,OrderDate,CustomerID,DelliveryAddress")] Order order)
         {
-            if (ModelState.IsValid)
-            {
-                _orderRepository.Create(order);
-                return RedirectToAction(nameof(Index));
-            }
+            _orderRepository.Add(order);
+            return RedirectToAction(nameof(Index));
 
-            return View(order);
+
         }
         // GET: Orders/Edit/5
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var order = _orderRepository.GetById(id);
 
             if (order == null)
             {
                 return NotFound();
             }
-
+            ViewData["OrderId"] = new SelectList(_orderRepository.GetAll(), "CustomerId", "CustomerName", order.CustomerId);
             return View(order);
         }
 
         // POST: Orders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderId,OrderDate,CustomerID,DelliveryAddress")] Order order)
         {
             if (id != order.OrderId)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            try
             {
-                _orderRepository.Edit(order);
-                return RedirectToAction(nameof(Index));
+                _orderRepository.Update(order);
             }
-
-            return View(order);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OrderExists(order.OrderId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Orders/Delete/5
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var order = _orderRepository.GetById(id);
 
             if (order == null)
@@ -116,20 +134,16 @@ namespace Controllers
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_orderRepository.Exists(id))
-            {
-                _orderRepository.Delete(id);
-                return RedirectToAction(nameof(Index));
-            }
-
-            return NotFound();
+            var order = _orderRepository.GetById(id);
+            _orderRepository.Remove(order);
+            return RedirectToAction(nameof(Index));
         }
 
         private bool OrderExists(int id)
         {
-            return (_context.Orders?.Any(e => e.OrderId == id)).GetValueOrDefault();
+            return _orderRepository.Exists(id);
         }
     }
 }

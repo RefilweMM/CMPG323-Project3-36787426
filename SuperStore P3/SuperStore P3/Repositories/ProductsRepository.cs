@@ -6,51 +6,20 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using System.Linq.Expressions;
 using EcoPower_Logistics.Repository;
+using EcoPower_Logistics.Models;
+using System.Linq;
 
 namespace EcoPower_Logistics.Data.Repository
 {
-    public class ProductsRepository : GenericRepository<Product>
+    public class ProductsRepository : GenericRepository<Product>, IProductsRepository
     {
-        protected readonly SuperStoreContext _context;
-
         public ProductsRepository(SuperStoreContext context) : base(context)
         {
-            _context = context;
         }
 
-        public void Add(Product entity)
+        public Product GetMostRecentProduct()
         {
-            _context.Set<Product>().Add(entity);
-        }
-
-        public void AddRange(IEnumerable<Product> entities)
-        {
-            _context.Set<Product>().AddRange(entities);
-        }
-
-        public IEnumerable<Product> Find(Expression<Func<Product, bool>> expression)
-        {
-            return _context.Set<Product>().Where(expression);
-        }
-
-        public IEnumerable<Product> GetAll()
-        {
-            return _context.Set<Product>().ToList();
-        }
-
-        public Product GetById(int id)
-        {
-            return _context.Set<Product>().Find(id);
-        }
-
-        public void Remove(Product entity)
-        {
-            _context.Set<Product>().Remove(entity);
-        }
-
-        public void RemoveRange(IEnumerable<Product> entities)
-        {
-            _context.Set<Product>().RemoveRange(entities);
+            return _context.Products.OrderByDescending(product => product.ProductName).FirstOrDefault()!;
         }
     }
 }

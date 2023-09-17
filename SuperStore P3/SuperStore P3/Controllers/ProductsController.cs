@@ -9,33 +9,39 @@ using Microsoft.EntityFrameworkCore;
 using Data;
 using Models;
 using EcoPower_Logistics.Repository;
+using System.Security.Policy;
+using EcoPower_Logistics.Data;
+using EcoPower_Logistics.Models;
 
-namespace Controllers
+namespace EcoPower_Logistics.Controllers
 {
     [Authorize]
     public class ProductsController : Controller
     {
-        private readonly SuperStoreContext _context;
+        private readonly IProductsRepository _productRepository;
 
-        private readonly ProductsRepository _productRepository;
-
-        public ProductsController()
+        public ProductsController(IProductsRepository productRepository)
         {
-            _productRepository = new ProductsRepository();
+            _productRepository = productRepository;
         }
+
         // GET: Products
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _productRepository.GetAll();
-            return View(products);
+            return View(_productRepository.GetAll());
         }
 
         // GET: Products/Details/5
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var product = _productRepository.GetById(id);
 
-            if (product == null)
+            if (_productRepository == null)
             {
                 return NotFound();
             }
@@ -56,24 +62,20 @@ namespace Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,ProductName,ProductDescription,UnitsInStock")] Product product)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(product);
+            _productRepository.Add(product);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Products/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = _productRepository.GetById(id);
+
             if (product == null)
             {
                 return NotFound();
@@ -92,33 +94,32 @@ namespace Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.ProductId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _productRepository.Update(product);
             }
-            return View(product);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductExists(product.ProductId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Products/Delete/5
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var product = _productRepository.GetById(id);
 
             if (product == null)
@@ -134,19 +135,14 @@ namespace Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-            }
-
+            var product = _productRepository.GetById(id);
+            _productRepository.Remove(product);
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int id)
         {
-            return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            return _productRepository.Exists(id);
         }
     }
 }

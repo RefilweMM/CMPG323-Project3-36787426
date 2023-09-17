@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Collections.Generic;
 using System;
+using EcoPower_Logistics.Models;
 
 namespace EcoPower_Logistics.Data.Repository
 {
@@ -13,6 +14,8 @@ namespace EcoPower_Logistics.Data.Repository
         void AddRange(IEnumerable<T> entities);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
+        void Update(T entity);
+        bool Exists(int id);
     }
 
 }
