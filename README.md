@@ -48,9 +48,9 @@ Customers and Orders can be tested in a similar manner.
   <li><p><a href="https://youtu.be/XUCsHYNPzrI">Learning Azure: Part 2—Architecture and interactive APIs for .NET and REST APIs | Azure Friday</a></p></li>
   <li><p><a href="https://docs.microsoft.com/en-us/answers/questions/585436/web-api-with-entity-framework-core-using-the-join.html"> WEB API with Entity Framework Core using the JOIN statement</a></p></li>
   <li><p><a href="https://stackoverflow.com/questions/58653768/joining-two-tables-in-asp-net-webapi-2">Joining two tables in asp.net webapi 2</a></p></li>
-  <li><p><a href="[https://www.dropbox.com/sh/p8fiokfpiqv4gud/AAC5X8SdanTnduTWYzVq4kQ7a?dl=0&preview=08+CMPG323+-+Project+3+-+Best+practise+and+standards+13+Sept.m4v">Application of Design Patterns to ASP.NET Core 3.1 MVC Web App 13 Sept</a></p></li> 
-  <li><p><a href="[https://www.dropbox.com/sh/p8fiokfpiqv4gud/AAC5X8SdanTnduTWYzVq4kQ7a?dl=0&preview=08+CMPG323+-+Project+3+-+WebApp+demo+13+Sept.m4v">Project 3 - WebApp demo 5 Sept</a></p></li>
-  <li><p><a href="[https://www.dropbox.com/sh/p8fiokfpiqv4gud/AAC5X8SdanTnduTWYzVq4kQ7a?dl=0&preview=08+CMPG+323+-+Design+patternc+class+15+Sept.m4v">Design patterns demo class 6 Sept</a></p></li>
+  <li><p><a href="https://www.dropbox.com/sh/p8fiokfpiqv4gud/AAC5X8SdanTnduTWYzVq4kQ7a?dl=0&preview=08+CMPG323+-+Project+3+-+Best+practise+and+standards+13+Sept.m4v">Application of Design Patterns to ASP.NET Core 3.1 MVC Web App 13 Sept</a></p></li> 
+  <li><p><a href="https://www.dropbox.com/sh/p8fiokfpiqv4gud/AAC5X8SdanTnduTWYzVq4kQ7a?dl=0&preview=08+CMPG323+-+Project+3+-+WebApp+demo+13+Sept.m4v">Project 3 - WebApp demo 5 Sept</a></p></li>
+  <li><p><a href="https://www.dropbox.com/sh/p8fiokfpiqv4gud/AAC5X8SdanTnduTWYzVq4kQ7a?dl=0&preview=08+CMPG+323+-+Design+patternc+class+15+Sept.m4v">Design patterns demo class 6 Sept</a></p></li>
     <li><p><a href="https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/intro?view=aspnetcore-3.1">Tutorial: Get started with EF Core in an ASP.NET MVC web app</a></p></li>
   <li><p><a href="https://codewithmukesh.com/blog/repository-pattern-in-aspnet-core/">Repository Pattern in ASP.NET Core – Ultimate Guide</a></p></li>
   <li><p><a href="https://medium.com/oppr/net-core-using-entity-framework-core-in-a-separate-project-e8636f9dc9e5">.NET Core — Using Entity Framework Core in a separate Project</a></p></li>
