@@ -9,9 +9,11 @@ Step 2: Register a user, if you haven't(however, don't forget to confirm email r
 username - me@gmail.com
 password - Testing@000
 
-Step 3: At the top of the page will see the home page and the tabs "Home"," Customers", "Orders", "Products", and "Logout" on the left hand side of you page. Click "Procucts".
+Step 3: At the top of the page will see the home page and the tabs "Home"," Customers", "Orders", "Products", and "Logout" on the left hand side of you page. Click "Products".
 
-Step 4: All availible products will appear on your page. You can Add, Edit, get Details or Delete products. To Add a product click "Creat new" under the "products" heading. Fill in the name, decription, and qauntity, then click the blue save button.
+All availible products will appear on your page. You can Add, Edit, get Details or Delete products. 
+
+Step 4: To Add a product click "Creat new" under the "products" heading. Fill in the productID(numeric), name, decription, and units in stock, then click the Save button.
 
 Step 5: To edit a product you can click the word 'Edit' which is underlined in blue next to the product you want to edit, fill in the name, decription, and qauntity, then click save.
 
