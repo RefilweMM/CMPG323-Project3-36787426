@@ -19,6 +19,6 @@ Step 6: To view a product click on 'Details' next to the product you want to vie
 
 Step 7: To delete a product click on 'Delete' next to the product you want to delete then click on the red "Delete" or "Back to list" if you changed your mind about the deleting the product.
 
-Note After peforming any the above metion actions you may want to refresh the page to see the changes.
+Note: After peforming any of the above mentioned actions you may want to refresh the page to see the changes.
 
 Customers and Orders can be tested in a similar manner.
