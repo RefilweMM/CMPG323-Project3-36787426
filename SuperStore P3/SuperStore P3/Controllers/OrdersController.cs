@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Data;
+using EcoPower_Logistics.Data;
 using EcoPower_Logistics.Models;
 using EcoPower_Logistics.Repository;
 
@@ -61,16 +61,15 @@ namespace EcoPower_Logistics.Controllers
         // POST: Orders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,OrderDate,CustomerID,DelliveryAddress")] Order order)
+        public async Task<IActionResult> Create([Bind("OrderId,OrderDate,CustomerId,DelliveryAddress")] Order order)
         {
             _orderRepository.Add(order);
             return RedirectToAction(nameof(Index));
-
-
         }
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -89,8 +88,9 @@ namespace EcoPower_Logistics.Controllers
         // POST: Orders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,OrderDate,CustomerID,DelliveryAddress")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderId,OrderDate,CustomerId,DelliveryAddress")] Order order)
         {
+
             if (id != order.OrderId)
             {
                 return NotFound();

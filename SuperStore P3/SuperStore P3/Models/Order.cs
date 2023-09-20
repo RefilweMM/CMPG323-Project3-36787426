@@ -8,9 +8,9 @@ namespace EcoPower_Logistics.Models
     public partial class Order
     {
         public Order()
-        {
-            OrderDetails = new HashSet<OrderDetail>();
-        }
+         {
+             OrderDetails = new HashSet<OrderDetail>();
+         }
 
         [DisplayName("Order ID")]
         public int OrderId { get; set; }
