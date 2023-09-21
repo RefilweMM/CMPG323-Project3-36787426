@@ -3,10 +3,10 @@
 For project 3, we're given an existing ASP.NET Core MVC Web Application that we need to enhance and improve by understanding and applying architectural patterns and implementing coding principles and design patterns.
 
 ## How to test the WebApp
-Step 1: Go to this url - 
+Step 1: Go to this url - https://ecopowerlogistics20230921132409.azurewebsites.net/
 
 Step 2: Register a user, if you haven't(however, don't forget to confirm email registration), otherwise using the follwoing login details: 
-username - me@gmail.com
+username - me1@gmail.com
 password - Testing@000
 
 Step 3: At the top of the page will see the home page and the tabs "Home"," Customers", "Orders", "Products", and "Logout" on the left hand side of you page. Click "Products".
